@@ -2,7 +2,9 @@
 ### Abridge x Anthropic Hackathon — build in progress
 
 ## Who's building this
-Piccanon — BMT/oncology charge nurse, domain expert, providing all clinical accuracy. Has a technical teammate (voice agent + health informatics background) helping build. Competing as a team, not solo.
+Emmanuel — BMT/oncology charge nurse, domain expert, providing all clinical accuracy. Has a technical teammate (voice agent + health informatics background) helping build. Competing as a team, not solo.
+
+Ezra — ML engineer
 
 ## The reframe / pitch
 Everyone else solving this space targets the discharge end. The actual failure point is the unverified handoff between outpatient teaching and inpatient reality — patients get outpatient BMT education classes before admission, but inpatient staff assume they retained everything, and there's no check on that assumption. Readmissions often trace back to GVHD (graft-versus-host disease — donor cells attacking the patient's body), tied to medication non-adherence (tacrolimus, Bactrim) or missed education (e.g. lung GVHD / fungal infection risk and when to wear a mask based on air quality).
