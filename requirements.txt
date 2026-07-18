@@ -2,3 +2,7 @@
 # and adaptive thinking require a recent version.
 anthropic
 python-dotenv
+
+# Web app: serves the JSON API + the mobile-styled frontend.
+fastapi
+uvicorn[standard]
