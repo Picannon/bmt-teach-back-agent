@@ -65,7 +65,7 @@
     },
     {
       "topic": "missed tacrolimus dose",
-      "question": "What should you do if you miss a dose of your tacrolimus?",
+      "question": "What would you do if you missed a dose of tacrolimus?",
       "source_quote": "So never double up if you miss a dose \u2014 just call us.",
       "expected_answer": "Do not double up; call the team.",
       "red_flag": false,
@@ -76,7 +76,7 @@
       "topic": "vomited dose",
       "question": "What should you do if you throw up right after taking your medicine?",
       "source_quote": "Also call us, don't just retake it on your own.",
-      "expected_answer": "Call the team; do not retake the dose on your own.",
+      "expected_answer": "Call the care team; do not retake the dose on your own.",
       "red_flag": false,
       "care_phase": "both",
       "id": 8
@@ -103,6 +103,7 @@
       "topic": "masking",
       "question": "When do you need to wear a mask in public?",
       "source_quote": "When your counts are low you'll wear a mask in public and around crowds \u2014 that infection and fungal risk is real.",
+      "expected_answer": "Wear a mask in public and around crowds when your counts are low, until the team says you can stop.",
       "expected_answer": "Wear a mask in public and around crowds when your counts are low, until the team says you can stop.",
       "red_flag": false,
       "care_phase": "both",

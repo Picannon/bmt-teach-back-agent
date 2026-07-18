@@ -1,3 +1,7 @@
+# Teach-back agent runtime output (mock patient data — never commit)
+sessions/
+care_team_followup.jsonl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
