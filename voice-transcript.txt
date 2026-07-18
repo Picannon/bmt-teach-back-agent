@@ -1,0 +1,63 @@
+[SYNTHETIC TRANSCRIPT — mock data only, no real patient information]
+BMT Outpatient Education Visit — Pre-Admission Teaching
+Participants: Nurse Educator (RN), Patient (PT), Caregiver (CG)
+
+RN: Hi, thanks for coming in today. Before your transplant admission, I want to walk you through the two main anti-rejection medications you'll be on afterward — tacrolimus and CellCept. Sound good?
+
+PT: Yeah, that's fine. My daughter's here too, she's going to be helping me at home.
+
+RN: Perfect, it's really important the caregiver hears this too. So the big picture: after your transplant, your new donor cells can sometimes attack your own body. That's called graft-versus-host disease, or GVHD. These two medicines are how we prevent that.
+
+PT: Okay.
+
+RN: Let's start with tacrolimus. You might also see it called FK506 or by the brand name Prograf. This is the most important one. You take it twice a day, about twelve hours apart — so think morning and evening, at the same times each day.
+
+CG: Does it matter if it's with food or not?
+
+RN: Great question. Just be consistent — if you take it with food, always take it with food. And do not take it with grapefruit or grapefruit juice, that can raise the level in your blood to a dangerous point.
+
+PT: No grapefruit, got it.
+
+RN: The reason timing matters so much is that we do blood tests to check your tacrolimus level. If you take it late, or skip a dose, the level drops and your risk of GVHD goes up. If the level gets too high, it can hurt your kidneys or cause tremors. So never double up if you miss a dose — just call us.
+
+PT: What if I throw it up right after taking it?
+
+RN: Also call us, don't just retake it on your own. Now, side effects to watch for with tacrolimus: hand tremors, headaches, high blood pressure, and higher blood sugar. Most of these we manage by adjusting the dose based on your levels.
+
+CG: You mentioned kidneys — is there anything we'd notice at home?
+
+RN: If you're urinating a lot less, or your feet and ankles swell up, let us know. Now the second medicine — CellCept, the generic name is mycophenolate mofetil. This one works alongside the tacrolimus to calm the immune system so it doesn't attack.
+
+PT: So I'm on both at the same time?
+
+RN: Yes, they're a team. CellCept is usually twice a day as well. The main side effects are stomach related — nausea, diarrhea — and it can lower your white blood cell counts, which is part of why you'll be more prone to infection.
+
+CG: That's the part I worry about, infections.
+
+RN: That's the right thing to worry about. Because both of these drugs suppress the immune system, you're at real risk for infections, including fungal infections in the lungs. That's why you'll also be on an antibiotic called Bactrim to prevent a specific pneumonia.
+
+PT: A mask — my neighbor who had this said something about a mask.
+
+RN: Yes. When your counts are low you'll wear a mask in public, around crowds, and especially when air quality is poor or there's construction or dust around — that fungal risk is real. We'll tell you exactly when you can stop.
+
+PT: And GVHD — how would I even know if it's happening?
+
+RN: Good — this is the most important part. Call us right away for: a skin rash, especially on your palms or soles, new diarrhea, yellowing of your eyes or skin, or a fever over 100.4. Fever is an emergency for you now. Don't wait, don't take Tylenol to hide it — call.
+
+CG: Write that number down for us?
+
+RN: It's on your discharge folder, and I'll circle it. Let me pause — can you tell me back in your own words when you'd call us?
+
+PT: If I get a fever over 100.4, a rash on my hands or feet, diarrhea, or my eyes go yellow. And I don't cover up the fever with Tylenol.
+
+RN: That's exactly right. And the two medicines?
+
+PT: Tacrolimus twice a day, same time, no grapefruit. And CellCept twice a day with it. Don't skip, don't double up, call if I miss one.
+
+RN: You've got it. We'll go over all of this again on the inpatient side too. Any last questions?
+
+PT: No, I think we're good for now.
+
+RN: Great. See you at admission.
+
+[END OF SYNTHETIC TRANSCRIPT]
