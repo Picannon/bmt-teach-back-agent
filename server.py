@@ -53,20 +53,23 @@ class AnswerIn(BaseModel):
 
 # --- evaluation hook --------------------------------------------------------
 
-def evaluate(question: dict, answer: str) -> dict:
-    """Call the friend's evaluation.py if present; placeholder until it is.
+def evaluate(question_id: int, answer: str) -> dict:
+    """Evaluate one answer via teach_back.evaluate_answer (your teammate's file).
 
-    Contract: evaluation.evaluate_answer(question: dict, answer: str) -> dict.
-    We only fall back on ImportError/AttributeError (module or function not yet
-    there). Any error raised *inside* a real evaluate_answer propagates so the
-    /api/answer handler can surface it.
+    teach_back.evaluate_answer(question_id, patient_answer) is the backend entry
+    point: it looks the question up in questions.json server-side, calls Claude
+    (wrapping the lower-level evaluate_turn), and returns
+    {"correct": bool, "feedback": str}.
+
+    A bad id raises KeyError (the caller turns that into a 404). If teach_back
+    isn't importable, we fall back to a placeholder so the flow still works.
     """
     try:
-        import evaluation  # your friend's module (not created/edited here)
+        import teach_back
 
-        return evaluation.evaluate_answer(question, answer)
+        return teach_back.evaluate_answer(question_id, answer)
     except (ImportError, AttributeError):
-        return {"verdict": "placeholder", "feedback": "success!"}
+        return {"correct": None, "feedback": "success! (teach_back not wired yet)"}
 
 
 # --- endpoints --------------------------------------------------------------
@@ -111,12 +114,12 @@ def api_notifications() -> JSONResponse:
 
 @app.post("/api/answer")
 def api_answer(payload: AnswerIn) -> JSONResponse:
-    question = question_by_id(payload.question_id)
-    if question is None:
-        return JSONResponse({"error": "question_not_found"}, status_code=404)
     try:
-        evaluation_result = evaluate(question, payload.answer)
-    except Exception as exc:  # noqa: BLE001 - a real evaluate_answer failed
+        evaluation_result = evaluate(payload.question_id, payload.answer)
+    except KeyError:
+        # teach_back.evaluate_answer raises KeyError for an unknown id.
+        return JSONResponse({"error": "question_not_found"}, status_code=404)
+    except Exception as exc:  # noqa: BLE001 - teach_back raised while evaluating
         return JSONResponse(
             {"error": "evaluation_failed", "detail": f"{type(exc).__name__}: {exc}"},
             status_code=500,

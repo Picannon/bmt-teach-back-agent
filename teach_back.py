@@ -111,6 +111,9 @@ def evaluate_answer(question_id: str, patient_answer: str,
     return evaluate_turn(client, question, patient_answer)
 
 
+# DEPRECATED: terminal REPL, unused by the app. The FastAPI backend drives the
+# ask/answer/evaluate loop through the browser now (via evaluate_answer). Kept as
+# a standalone fallback: `python teach_back.py` still runs the loop.
 def run_loop(questions: list[dict], model: str = MODEL) -> list[dict]:
     """Ask every question in turn, evaluate + remediate, collect the results."""
     client = anthropic.Anthropic()
@@ -143,6 +146,7 @@ def run_loop(questions: list[dict], model: str = MODEL) -> list[dict]:
     return results
 
 
+# DEPRECATED: terminal REPL output helper, unused by the app.
 def print_summary(results: list[dict]) -> None:
     if not results:
         return
@@ -161,6 +165,8 @@ def print_summary(results: list[dict]) -> None:
     print("=" * 52)
 
 
+# DEPRECATED: terminal REPL entry point, unused by the app. Kept so
+# `python teach_back.py` still works as a standalone fallback demo.
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Interactive BMT teach-back loop (ask–tell)."

@@ -47,10 +47,21 @@ async function submitAnswer() {
     const data = await res.json();
     if (!res.ok) {
       verdictEl.textContent = "Error";
+      verdictEl.className = "agent__verdict";
       feedbackEl.textContent = data.detail || data.error || "Something went wrong.";
     } else {
+      // teach_back returns {correct: bool, feedback: str}.
       const evaluation = data.evaluation || {};
-      verdictEl.textContent = evaluation.verdict || "";
+      if (evaluation.correct === true) {
+        verdictEl.textContent = "Correct ✓";
+        verdictEl.className = "agent__verdict agent__verdict--ok";
+      } else if (evaluation.correct === false) {
+        verdictEl.textContent = "Let's review ✗";
+        verdictEl.className = "agent__verdict agent__verdict--review";
+      } else {
+        verdictEl.textContent = "";
+        verdictEl.className = "agent__verdict";
+      }
       feedbackEl.textContent = evaluation.feedback || JSON.stringify(evaluation);
     }
     agentEl.hidden = false;
