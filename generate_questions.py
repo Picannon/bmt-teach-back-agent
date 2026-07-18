@@ -113,7 +113,12 @@ def generate_questions(transcript: str, prompt: str, model: str = MODEL) -> dict
 
     # With structured outputs the first text block is guaranteed valid JSON.
     text = next(block.text for block in response.content if block.type == "text")
-    return json.loads(text)
+    result = json.loads(text)
+    # Bake a stable id (= list index) into each question so the app can address
+    # them (GET /api/questions/{id}, notify.py, etc.).
+    for i, q in enumerate(result["questions"]):
+        q["id"] = i
+    return result
 
 
 def filter_by_phase(questions: list[dict], phase: str) -> list[dict]:

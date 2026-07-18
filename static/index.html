@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <!-- Home-screen / fullscreen hints for iOS when "Add to Home Screen" is used -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#0f766e" />
@@ -11,28 +10,37 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <div class="app">
-      <header class="app__header">
-        <div class="app__brand">BMT Teach-Back</div>
-        <div class="app__subtitle">Knowledge Continuity Companion</div>
-      </header>
+    <!-- Mock iOS home screen: sells "the notification comes to your phone".
+         The real iOS status bar sits on top of the wallpaper in standalone
+         mode, so we don't fake one. -->
+    <div class="homescreen">
+      <div class="home-grid">
+        <div class="home-icon"><div class="home-icon__tile">📞</div><span class="home-icon__label">Phone</span></div>
+        <div class="home-icon"><div class="home-icon__tile">💬</div><span class="home-icon__label">Messages</span></div>
+        <div class="home-icon"><div class="home-icon__tile">❤️</div><span class="home-icon__label">Health</span></div>
+        <div class="home-icon"><div class="home-icon__tile">📷</div><span class="home-icon__label">Camera</span></div>
+        <div class="home-icon"><div class="home-icon__tile">📅</div><span class="home-icon__label">Calendar</span></div>
+        <div class="home-icon"><div class="home-icon__tile">📝</div><span class="home-icon__label">Notes</span></div>
+        <div class="home-icon"><div class="home-icon__tile">⛅️</div><span class="home-icon__label">Weather</span></div>
+        <div class="home-icon">
+          <div class="home-icon__tile home-icon__tile--bmt">🩺<span class="home-icon__badge">1</span></div>
+          <span class="home-icon__label">BMT</span>
+        </div>
+      </div>
 
-      <main class="app__body">
-        <section class="card">
-          <div class="card__eyebrow">Your check-in</div>
-          <h1 class="card__title">Personalized teach-back is coming soon</h1>
-          <p class="card__text">
-            This is the app skeleton. Next we'll load your questions from the
-            visit and walk through them here.
-          </p>
-        </section>
-
-        <button id="check" class="btn">Check connection</button>
-        <p id="status" class="status" role="status"></p>
-      </main>
-
-      <footer class="app__footer">Abridge × Anthropic Hackathon</footer>
+      <div class="dock">
+        <div class="home-icon__tile">📞</div>
+        <div class="home-icon__tile">🧭</div>
+        <div class="home-icon__tile">🎵</div>
+        <div class="home-icon__tile">✉️</div>
+      </div>
     </div>
+
+    <!-- Notification banner (hidden until a notification arrives) -->
+    <button id="banner" class="banner" hidden>
+      <div class="banner__title" id="banner-title"></div>
+      <div class="banner__body" id="banner-body"></div>
+    </button>
 
     <script src="/app.js"></script>
   </body>
