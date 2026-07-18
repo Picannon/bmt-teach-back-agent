@@ -28,6 +28,7 @@ MODEL = "claude-opus-4-8"
 
 DEFAULT_TRANSCRIPT = "voice-transcript.txt"
 DEFAULT_PROMPT = "prompt.md"
+DEFAULT_QUESTIONS = "questions.json"
 
 # JSON Schema the model is constrained to. Every question is grounded in a
 # verbatim quote from the transcript so the UI can show where it came from.
@@ -57,7 +58,12 @@ QUESTION_SCHEMA = {
                     },
                     "red_flag": {
                         "type": "boolean",
-                        "description": "True if safety-critical (fever, rash, missed dose, etc.)",
+                        "description": "True only for acute 'call the team now' items (fever, rash, rigors, etc.)",
+                    },
+                    "care_phase": {
+                        "type": "string",
+                        "enum": ["inpatient_admission", "discharge", "both"],
+                        "description": "When to ask: admission knowledge check, discharge teach-back, or both",
                     },
                 },
                 "required": [
@@ -66,6 +72,7 @@ QUESTION_SCHEMA = {
                     "source_quote",
                     "expected_answer",
                     "red_flag",
+                    "care_phase",
                 ],
                 "additionalProperties": False,
             },
@@ -109,6 +116,16 @@ def generate_questions(transcript: str, prompt: str, model: str = MODEL) -> dict
     return json.loads(text)
 
 
+def filter_by_phase(questions: list[dict], phase: str) -> list[dict]:
+    """Return the questions to ask at a given care phase.
+
+    A phase-specific view includes questions tagged for that exact phase PLUS
+    any tagged ``both`` (shared items like the tacrolimus/CellCept schedule that
+    belong in both the admission check and the discharge teach-back).
+    """
+    return [q for q in questions if q["care_phase"] in (phase, "both")]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Generate BMT teach-back questions from a visit transcript."
@@ -127,7 +144,43 @@ def main() -> None:
         "--model", default=MODEL, help=f"Claude model ID (default: {MODEL})"
     )
     parser.add_argument("--out", help="Write JSON here instead of stdout")
+    parser.add_argument(
+        "--phase",
+        choices=["inpatient_admission", "discharge"],
+        help=(
+            "Filter an already-generated file to one care phase instead of "
+            "generating. Reads --from (no API call); includes 'both' questions."
+        ),
+    )
+    parser.add_argument(
+        "--from",
+        dest="source",
+        default=DEFAULT_QUESTIONS,
+        help=f"File to filter when --phase is used (default: {DEFAULT_QUESTIONS})",
+    )
     args = parser.parse_args()
+
+    # --phase is a fast, offline view: read the saved questions and filter them.
+    # No model call, so it's safe to run live during a demo.
+    if args.phase:
+        source = Path(args.source)
+        if not source.exists():
+            parser.error(
+                f"{source} not found. Generate it first:\n"
+                f"  python generate_questions.py --out {source}"
+            )
+        questions = json.loads(source.read_text())["questions"]
+        filtered = filter_by_phase(questions, args.phase)
+        output = json.dumps({"questions": filtered}, indent=2)
+        if args.out:
+            Path(args.out).write_text(output)
+            print(
+                f"Wrote {len(filtered)} '{args.phase}' questions to {args.out}",
+                file=sys.stderr,
+            )
+        else:
+            print(output)
+        return
 
     transcript = Path(args.transcript).read_text()
     prompt = Path(args.prompt).read_text()

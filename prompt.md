@@ -29,8 +29,23 @@ Prioritize, in this order:
 - **Plain language.** Write at roughly a 6th-grade reading level. No jargon the
   patient wasn't taught in the visit.
 - **One concept per question.** Don't bundle two instructions into one question.
-- **Mark red flags.** Set `red_flag: true` for any question covering a
-  safety-critical "call us" scenario, and `false` otherwise.
+- **Mark red flags.** Set `red_flag: true` ONLY for questions covering an acute
+  "call the team / seek care now" scenario — fever, rash, new diarrhea, jaundice,
+  chills or rigors, kidney warning signs. Everything else (including medication
+  dosing/timing knowledge) is `false`. Keep the red list short: over-flagging
+  dilutes the signal for the reviewing nurse.
+- **Tag the care phase.** Set `care_phase` to when the question should be asked:
+  - `inpatient_admission` — part of the knowledge check at admission, while the
+    patient is inpatient and staff can still close gaps.
+  - `discharge` — part of the teach-back before the patient goes home.
+  - `both` — belongs in both checks.
+  Tacrolimus and CellCept are started inpatient (staff-administered) and continue
+  through discharge, so their dosing, timing, and interaction questions are
+  `both`. Masking / infection-precaution questions are also `both` — masking
+  matters whenever counts are low, which spans outpatient, admission, and after
+  discharge, so it must be verified at both checks. Acute
+  "call us" red flags are what the patient must act on at home, so they are
+  usually `discharge` (or `both` if relevant during admission too).
 - **`expected_answer`** should state what a correct patient answer must contain,
   so a reviewer (or the app) can score the response.
 - Aim for roughly 8–14 questions. Quality and coverage matter more than count.
