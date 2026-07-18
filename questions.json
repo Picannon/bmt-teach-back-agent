@@ -1,116 +1,130 @@
 {
   "questions": [
     {
-      "topic": "fever threshold",
-      "question": "At what temperature, or in what fever situation, do you need to call the care team right away?",
-      "source_quote": "Here's the rule: call for any single temperature over 100.4, or a temperature between 100.0 and 100.4 that lasts an hour or more.",
-      "expected_answer": "Call for any single temperature over 100.4, or a temp between 100.0 and 100.4 lasting an hour or more.",
-      "red_flag": true,
-      "care_phase": "discharge"
-    },
-    {
-      "topic": "not masking fever with Tylenol",
-      "question": "Why shouldn't you take Tylenol when you feel feverish or unwell?",
-      "source_quote": "Don't wait, don't take Tylenol to hide any of it \u2014 call.",
-      "expected_answer": "Tylenol can hide a fever/signs of infection; you should call the team instead of covering it up.",
-      "red_flag": true,
-      "care_phase": "discharge"
-    },
-    {
-      "topic": "rigors / chills",
-      "question": "If you start shaking or get chills but your thermometer looks normal, what should you do?",
-      "source_quote": "if you get chills or start shaking, what we call rigors, call us. That shaking can be a sign of a serious infection even before the thermometer catches up.",
-      "expected_answer": "Call the team right away, because chills/shaking can signal serious infection even without a fever showing yet.",
-      "red_flag": true,
-      "care_phase": "discharge"
-    },
-    {
-      "topic": "GVHD warning signs",
-      "question": "What skin or body changes should make you call the team right away?",
-      "source_quote": "Call us right away for: a skin rash, especially on your palms or soles, new diarrhea, yellowing of your eyes or skin, or a fever.",
-      "expected_answer": "A rash (especially palms/soles), new diarrhea, or yellowing of the eyes or skin.",
-      "red_flag": true,
-      "care_phase": "discharge"
-    },
-    {
       "topic": "tacrolimus timing",
-      "question": "How and when do you take your tacrolimus each day?",
+      "question": "Can you tell me how often you take tacrolimus and how you should space out the doses?",
       "source_quote": "You take it twice a day, about twelve hours apart \u2014 so think morning and evening, at the same times each day.",
-      "expected_answer": "Twice a day, about 12 hours apart, at the same times each day.",
+      "expected_answer": "Twice a day, about 12 hours apart, at the same times each day (morning and evening).",
       "red_flag": false,
-      "care_phase": "both"
+      "care_phase": "both",
+      "id": "tacrolimus-timing"
+    },
+    {
+      "topic": "tacrolimus with food",
+      "question": "What did we say about taking tacrolimus with or without food?",
+      "source_quote": "Just be consistent \u2014 if you take it with food, always take it with food.",
+      "expected_answer": "Be consistent \u2014 always take it the same way, either always with food or always without.",
+      "red_flag": false,
+      "care_phase": "both",
+      "id": "tacrolimus-with-food"
     },
     {
       "topic": "grapefruit interaction",
-      "question": "Which food or drink must you avoid with tacrolimus, and why?",
-      "source_quote": "do not take it with grapefruit or grapefruit juice, that can raise the level in your blood to a dangerous point.",
+      "question": "Is there any food or drink you need to avoid with tacrolimus, and why?",
+      "source_quote": "And do not take it with grapefruit or grapefruit juice, that can raise the level in your blood to a dangerous point.",
       "expected_answer": "Avoid grapefruit and grapefruit juice because it can raise the tacrolimus level to a dangerous point.",
       "red_flag": false,
-      "care_phase": "both"
+      "care_phase": "both",
+      "id": "grapefruit-interaction"
     },
     {
       "topic": "missed tacrolimus dose",
-      "question": "What should you do if you miss a dose of your tacrolimus?",
+      "question": "What would you do if you missed a dose of tacrolimus?",
       "source_quote": "So never double up if you miss a dose \u2014 just call us.",
-      "expected_answer": "Do not double up; call the care team.",
+      "expected_answer": "Do not double up on the dose; call the care team.",
       "red_flag": false,
-      "care_phase": "both"
+      "care_phase": "both",
+      "id": "missed-tacrolimus-dose"
     },
     {
       "topic": "vomited dose",
       "question": "What should you do if you throw up right after taking your medicine?",
       "source_quote": "Also call us, don't just retake it on your own.",
-      "expected_answer": "Call the team; do not retake the dose on your own.",
+      "expected_answer": "Call the care team; do not retake the dose on your own.",
       "red_flag": false,
-      "care_phase": "both"
-    },
-    {
-      "topic": "taking with food consistently",
-      "question": "Does it matter whether you take tacrolimus with food?",
-      "source_quote": "Just be consistent \u2014 if you take it with food, always take it with food.",
-      "expected_answer": "Be consistent \u2014 if you take it with food, always take it with food.",
-      "red_flag": false,
-      "care_phase": "both"
-    },
-    {
-      "topic": "CellCept timing",
-      "question": "How often do you take your CellCept (mycophenolate)?",
-      "source_quote": "CellCept is usually taken every 8 hours.",
-      "expected_answer": "Every 8 hours (three times a day).",
-      "red_flag": false,
-      "care_phase": "both"
+      "care_phase": "both",
+      "id": "vomited-dose"
     },
     {
       "topic": "kidney warning signs",
-      "question": "What signs at home would suggest your kidneys are being affected?",
+      "question": "What changes at home would tell you the tacrolimus might be affecting your kidneys?",
       "source_quote": "If you're urinating a lot less, or your feet and ankles swell up, let us know.",
-      "expected_answer": "Urinating much less, or swelling of the feet and ankles.",
+      "expected_answer": "Urinating much less than usual, or swelling in the feet and ankles \u2014 call the team.",
       "red_flag": true,
-      "care_phase": "discharge"
+      "care_phase": "discharge",
+      "id": "kidney-warning-signs"
     },
     {
-      "topic": "masking / infection precautions",
-      "question": "When and why do you need to wear a mask?",
+      "topic": "CellCept purpose and dosing",
+      "question": "Can you tell me what CellCept does and how often you take it?",
+      "source_quote": "Yes, they're a team. CellCept is usually taken every 8 hours.",
+      "expected_answer": "CellCept works with tacrolimus to calm the immune system so it doesn't attack; taken every 8 hours.",
+      "red_flag": false,
+      "care_phase": "both",
+      "id": "cellcept-purpose-and-dosing"
+    },
+    {
+      "topic": "Bactrim purpose",
+      "question": "Why will you be taking the antibiotic Bactrim?",
+      "source_quote": "That's why you'll also be on an antibiotic called Bactrim to prevent a specific pneumonia.",
+      "expected_answer": "To prevent a specific type of pneumonia, since the medicines suppress the immune system.",
+      "red_flag": false,
+      "care_phase": "both",
+      "id": "bactrim-purpose"
+    },
+    {
+      "topic": "masking",
+      "question": "When and where do you need to wear a mask?",
       "source_quote": "When your counts are low you'll wear a mask in public and around crowds \u2014 that infection and fungal risk is real.",
-      "expected_answer": "Wear a mask in public and around crowds when counts are low, because of high infection/fungal risk.",
+      "expected_answer": "Wear a mask in public and around crowds when your counts are low, until the team says you can stop.",
       "red_flag": false,
-      "care_phase": "both"
+      "care_phase": "both",
+      "id": "masking"
     },
     {
-      "topic": "why two medicines / GVHD",
-      "question": "Can you explain what GVHD is and why you take these two medicines?",
+      "topic": "fever rule",
+      "question": "What is the exact fever rule for when you need to call us?",
+      "source_quote": "call for any single temperature over 100.4, or a temperature between 100.0 and 100.4 that lasts an hour or more.",
+      "expected_answer": "Call for any single temperature over 100.4, or a temperature of 100.0\u2013100.4 lasting an hour or more.",
+      "red_flag": true,
+      "care_phase": "discharge",
+      "id": "fever-rule"
+    },
+    {
+      "topic": "no Tylenol masking fever",
+      "question": "Why shouldn't you take Tylenol when you feel feverish?",
+      "source_quote": "Don't wait, don't take Tylenol to hide any of it \u2014 call.",
+      "expected_answer": "Tylenol can hide a fever; do not take it to cover symptoms \u2014 call the team instead.",
+      "red_flag": true,
+      "care_phase": "discharge",
+      "id": "no-tylenol-masking-fever"
+    },
+    {
+      "topic": "chills and rigors",
+      "question": "If you get chills or start shaking but have no fever, what should you do?",
+      "source_quote": "if you get chills or start shaking, what we call rigors, call us. That shaking can be a sign of a serious infection even before the thermometer catches up.",
+      "expected_answer": "Call the team right away \u2014 chills or shaking (rigors) can signal serious infection even without a fever.",
+      "red_flag": true,
+      "care_phase": "discharge",
+      "id": "chills-and-rigors"
+    },
+    {
+      "topic": "GVHD warning signs",
+      "question": "What signs of GVHD or serious problems should make you call us right away?",
+      "source_quote": "Call us right away for: a skin rash, especially on your palms or soles, new diarrhea, yellowing of your eyes or skin, or a fever.",
+      "expected_answer": "A skin rash (especially palms or soles), new diarrhea, yellowing of eyes or skin, or a fever.",
+      "red_flag": true,
+      "care_phase": "discharge",
+      "id": "gvhd-warning-signs"
+    },
+    {
+      "topic": "why the medicines matter",
+      "question": "Can you explain what GVHD is and why these two medicines are important?",
       "source_quote": "after your transplant, your new donor cells can sometimes attack your own body. That's called graft-versus-host disease, or GVHD. These two medicines are how we prevent that.",
-      "expected_answer": "GVHD is when the new donor cells attack your body; the two medicines work together to prevent it.",
+      "expected_answer": "GVHD is when donor cells attack your own body; tacrolimus and CellCept help prevent it.",
       "red_flag": false,
-      "care_phase": "both"
-    },
-    {
-      "topic": "Bactrim prophylaxis",
-      "question": "What is the Bactrim for?",
-      "source_quote": "you'll also be on an antibiotic called Bactrim to prevent a specific pneumonia.",
-      "expected_answer": "Bactrim is an antibiotic to prevent a specific type of pneumonia.",
-      "red_flag": false,
-      "care_phase": "both"
+      "care_phase": "both",
+      "id": "why-the-medicines-matter"
     }
   ]
 }

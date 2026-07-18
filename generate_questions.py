@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -83,6 +84,25 @@ QUESTION_SCHEMA = {
 }
 
 
+def _slugify(text: str) -> str:
+    """Turn a topic label into a url-safe id fragment, e.g. 'fever-threshold'."""
+    slug = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return slug or "question"
+
+
+def _assign_ids(questions: list[dict]) -> None:
+    """Give each question a stable, unique `id` derived from its topic.
+
+    The frontend sends this id back at submit time so the backend can look the
+    question up server-side — the answer key never has to leave the server.
+    """
+    seen: dict[str, int] = {}
+    for q in questions:
+        base = _slugify(q["topic"])
+        seen[base] = seen.get(base, 0) + 1
+        q["id"] = base if seen[base] == 1 else f"{base}-{seen[base]}"
+
+
 def generate_questions(transcript: str, prompt: str, model: str = MODEL) -> dict:
     """Return a validated teach-back question set for a visit transcript.
 
@@ -113,7 +133,9 @@ def generate_questions(transcript: str, prompt: str, model: str = MODEL) -> dict
 
     # With structured outputs the first text block is guaranteed valid JSON.
     text = next(block.text for block in response.content if block.type == "text")
-    return json.loads(text)
+    result = json.loads(text)
+    _assign_ids(result.get("questions", []))
+    return result
 
 
 def filter_by_phase(questions: list[dict], phase: str) -> list[dict]:
