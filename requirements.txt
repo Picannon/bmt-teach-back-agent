@@ -1,0 +1,4 @@
+# Install the latest anthropic SDK — structured outputs (output_config.format)
+# and adaptive thinking require a recent version.
+anthropic
+python-dotenv
