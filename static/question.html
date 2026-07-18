@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0f766e" />
+    <title>Teach-Back</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app__header app__header--row">
+        <a class="app__back" href="/">‹ Home</a>
+        <div class="app__brand">Teach-back</div>
+      </header>
+
+      <main class="app__body">
+        <section class="card">
+          <div class="card__eyebrow" id="topic">…</div>
+          <h1 class="card__title" id="question">Loading…</h1>
+        </section>
+
+        <textarea
+          id="answer"
+          class="answer"
+          rows="4"
+          placeholder="Type your answer in your own words…"
+        ></textarea>
+        <button id="submit" class="btn">Submit</button>
+
+        <section class="agent" id="agent" hidden>
+          <div class="agent__label">Response</div>
+          <div class="agent__verdict" id="verdict"></div>
+          <div class="agent__feedback" id="feedback"></div>
+        </section>
+      </main>
+
+      <footer class="app__footer">Abridge × Anthropic Hackathon</footer>
+    </div>
+
+    <script src="/question.js"></script>
+  </body>
+</html>
