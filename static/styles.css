@@ -221,6 +221,49 @@ body {
   color: var(--red);
 }
 
+/* --- Conversation thread (question page) --- */
+.thread {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.answer--locked {
+  background: #f8fafa;
+  color: var(--muted);
+}
+
+.line {
+  font-size: 14px;
+  line-height: 1.45;
+  padding: 11px 14px;
+  border-radius: 12px;
+}
+
+.line--note {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #d1fae5;
+}
+
+.line--escalate {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.line--finish {
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.line--thinking {
+  color: var(--muted);
+  font-style: italic;
+}
+
 .app__footer {
   text-align: center;
   padding: 16px calc(env(safe-area-inset-bottom) + 16px);

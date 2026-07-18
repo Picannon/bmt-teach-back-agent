@@ -1,79 +1,119 @@
-// Question page: read the id from the URL, fetch the question, let the patient
-// answer, POST it for evaluation, and render the agent's response.
+// Conversation page: the notified question is turn 1. On submit, the server
+// drives teach_back_agent and returns this turn's events (note / escalate /
+// next question / finish), which we append to the thread. Adaptive follow-ups
+// keep the conversation going until the agent finishes.
 
 const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+const firstQuestionId = params.get("id");
+const thread = document.getElementById("thread");
 
-const topicEl = document.getElementById("topic");
-const questionEl = document.getElementById("question");
-const answerEl = document.getElementById("answer");
-const submitBtn = document.getElementById("submit");
-const agentEl = document.getElementById("agent");
-const verdictEl = document.getElementById("verdict");
-const feedbackEl = document.getElementById("feedback");
+let conversationId = null; // null until the first submit returns one
 
-async function loadQuestion() {
-  if (id === null) {
-    topicEl.textContent = "";
-    questionEl.textContent = "No question specified.";
-    return;
-  }
-  try {
-    const res = await fetch(`/api/questions/${id}`);
-    if (!res.ok) {
-      questionEl.textContent = "Question not found.";
-      return;
-    }
-    const q = await res.json();
-    topicEl.textContent = q.topic || "Teach-back";
-    questionEl.textContent = q.question;
-  } catch (_) {
-    questionEl.textContent = "Could not load the question.";
-  }
+function el(tag, cls, text) {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text != null) node.textContent = text;
+  return node;
 }
 
-async function submitAnswer() {
-  const answer = answerEl.value.trim();
+function scrollDown() {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+function addQuestion(text) {
+  // Only the question — never the topic label, which can give away the answer.
+  const card = el("section", "card");
+  card.appendChild(el("h2", "card__title", text));
+  thread.appendChild(card);
+}
+
+// Render an answer box + Submit for the active question, and wire submission.
+function addAnswerInput() {
+  const ta = el("textarea", "answer");
+  ta.rows = 3;
+  ta.placeholder = "Type your answer in your own words…";
+  const btn = el("button", "btn", "Submit");
+  thread.appendChild(ta);
+  thread.appendChild(btn);
+  btn.addEventListener("click", () => submitAnswer(ta, btn));
+  ta.focus();
+  scrollDown();
+}
+
+function addEvent(ev) {
+  if (ev.type === "note") {
+    thread.appendChild(
+      el("div", "line line--note", `📝 Note recorded in your clinical document: ${ev.text}`)
+    );
+  } else if (ev.type === "escalate") {
+    thread.appendChild(
+      el("div", "line line--escalate", `⚠️ Escalating to your clinician: ${ev.text}`)
+    );
+  } else if (ev.type === "finish") {
+    thread.appendChild(el("div", "line line--finish", ev.text));
+  } else if (ev.type === "question") {
+    addQuestion(ev.text);
+    addAnswerInput();
+  }
+  scrollDown();
+}
+
+async function submitAnswer(ta, btn) {
+  const answer = ta.value.trim();
   if (!answer) return;
 
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Checking…";
+  // Lock this turn's input.
+  ta.readOnly = true;
+  ta.classList.add("answer--locked");
+  btn.remove();
+
+  const body = conversationId
+    ? { conversation_id: conversationId, answer }
+    : { question_id: Number(firstQuestionId), answer };
+
+  const thinking = el("div", "line line--thinking", "Thinking…");
+  thread.appendChild(thinking);
+  scrollDown();
+
   try {
     const res = await fetch("/api/answer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question_id: Number(id), answer }),
+      body: JSON.stringify(body),
     });
     const data = await res.json();
+    thinking.remove();
     if (!res.ok) {
-      verdictEl.textContent = "Error";
-      verdictEl.className = "agent__verdict";
-      feedbackEl.textContent = data.detail || data.error || "Something went wrong.";
-    } else {
-      // teach_back returns {correct: bool, feedback: str}.
-      const evaluation = data.evaluation || {};
-      if (evaluation.correct === true) {
-        verdictEl.textContent = "Correct ✓";
-        verdictEl.className = "agent__verdict agent__verdict--ok";
-      } else if (evaluation.correct === false) {
-        verdictEl.textContent = "Let's review ✗";
-        verdictEl.className = "agent__verdict agent__verdict--review";
-      } else {
-        verdictEl.textContent = "";
-        verdictEl.className = "agent__verdict";
-      }
-      feedbackEl.textContent = evaluation.feedback || JSON.stringify(evaluation);
+      thread.appendChild(
+        el("div", "line line--escalate", data.detail || data.error || "Something went wrong.")
+      );
+      return;
     }
-    agentEl.hidden = false;
+    conversationId = data.conversation_id;
+    for (const ev of data.events) addEvent(ev);
   } catch (err) {
-    verdictEl.textContent = "Error";
-    feedbackEl.textContent = err.message;
-    agentEl.hidden = false;
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Submit";
+    thinking.remove();
+    thread.appendChild(el("div", "line line--escalate", err.message));
   }
 }
 
-submitBtn.addEventListener("click", submitAnswer);
-loadQuestion();
+async function loadFirstQuestion() {
+  if (!firstQuestionId) {
+    addQuestion("No question specified.");
+    return;
+  }
+  try {
+    const res = await fetch(`/api/questions/${firstQuestionId}`);
+    const q = await res.json();
+    if (!res.ok) {
+      addQuestion("Question not found.");
+      return;
+    }
+    addQuestion(q.question);
+    addAnswerInput();
+  } catch (_) {
+    addQuestion("Could not load the question.");
+  }
+}
+
+loadFirstQuestion();
