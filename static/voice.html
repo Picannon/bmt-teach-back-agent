@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0f766e" />
+    <title>Voice Agent</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app__header app__header--row">
+        <a class="app__back" href="/">‹ Home</a>
+        <div class="app__brand">Class listener</div>
+      </header>
+
+      <main class="app__body">
+        <div class="card">
+          <div class="card__eyebrow">Ambient class capture</div>
+          <div class="card__title">
+            <span id="pill" class="pill pill--asleep">💤 asleep</span>
+          </div>
+          <p class="card__text" id="hint">
+            The agent stays asleep until its armed day, then only captures once it
+            hears the class talk about the transplant meds.
+          </p>
+
+          <button id="arm" class="btn btn--ghost">Arm agent (demo)</button>
+          <button id="listen" class="btn" disabled>Start listening</button>
+          <button id="stop" class="btn btn--stop" hidden>Stop &amp; generate</button>
+          <button id="synthetic" class="btn btn--ghost">Use synthetic transcript (fallback)</button>
+        </div>
+
+        <div class="card" id="live-card" hidden>
+          <div class="card__eyebrow">Live transcript</div>
+          <p class="transcript" id="transcript"></p>
+          <p class="transcript transcript--interim" id="interim"></p>
+        </div>
+
+        <div class="card" id="result-card" hidden>
+          <div class="card__eyebrow">Generated teach-back</div>
+          <p class="card__text" id="result-text"></p>
+          <a id="go-teachback" class="btn" href="#">Start the teach-back →</a>
+        </div>
+      </main>
+
+      <footer class="app__footer">Abridge × Anthropic Hackathon</footer>
+    </div>
+
+    <script src="/voice.js"></script>
+  </body>
+</html>

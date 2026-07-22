@@ -397,3 +397,33 @@ body {
   width: 58px;
   height: 58px;
 }
+/* ── Voice agent page ─────────────────────────────────────────────────── */
+.pill {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.pill--asleep    { background: #eef2f2; color: var(--muted); }
+.pill--listening { background: #e0f2fe; color: #075985; }
+.pill--capturing { background: #fee2e2; color: #991b1b; }
+.pill--done      { background: #ecfdf5; color: #065f46; }
+
+.btn--ghost {
+  background: #fff;
+  color: var(--teal);
+  border: 1px solid var(--line);
+}
+.btn--ghost:active { background: #f1f5f4; }
+.btn--stop { background: var(--red); }
+.btn--stop:active { background: #991b1b; }
+
+.transcript {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: pre-wrap;
+  margin: 4px 0 0;
+}
+.transcript--interim { color: var(--muted); font-style: italic; }

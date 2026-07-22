@@ -6,3 +6,6 @@ python-dotenv
 # Web app: serves the JSON API + the mobile-styled frontend.
 fastapi
 uvicorn[standard]
+
+# Live voice agent: WebSocket client to Deepgram's streaming STT (raw WS, no SDK).
+websockets

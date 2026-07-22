@@ -29,7 +29,9 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+import memory  # shared SQLite store (transcripts, questions, sessions, escalations)
 import teach_back_agent as agent_mod  # SYSTEM/TOOLS + memory/escalation helpers
+import voice_agent  # live class-listener router (/api/voice/*)
 
 QUESTIONS_FILE = Path("questions.json")
 PATIENT_ID = "demo-patient"  # single demo patient (enables cross-session memory)
@@ -50,19 +52,32 @@ SYSTEM = agent_mod.SYSTEM + (
 )
 
 app = FastAPI(title="BMT Teach-Back")
+app.include_router(voice_agent.router)  # before the static mount so /api/voice/* wins
+
+memory.connect()  # open/init bmt.db
+memory.upsert_patient(PATIENT_ID, name="Demo patient")  # ensure the row exists
 
 # teach_back_agent's import already ran load_dotenv(), so the key is in the env.
 _client = anthropic.Anthropic()
 
-# In-memory notification queue + conversation store (single process; demo-fine).
+# In-memory notification queue (single process; demo-fine). Conversations are
+# cached here but also persisted to memory so a restart mid-session survives.
 _notifications: list[dict] = []
 _next_id = 1
 _conversations: dict[str, dict] = {}
 
 
-def question_by_id(qid: int) -> dict | None:
-    questions = json.loads(QUESTIONS_FILE.read_text())["questions"]
-    return next((q for q in questions if q.get("id") == qid), None)
+def active_questions() -> list[dict]:
+    """The question set to teach from: prefer the latest voice-generated set in
+    the DB, fall back to the checked-in questions.json for a cold start."""
+    live = memory.latest_questions(PATIENT_ID)
+    if live:
+        return live
+    return json.loads(QUESTIONS_FILE.read_text())["questions"]
+
+
+def question_by_id(qid) -> dict | None:
+    return next((q for q in active_questions() if str(q.get("id")) == str(qid)), None)
 
 
 class NotifyIn(BaseModel):
@@ -123,25 +138,23 @@ def _tool_result(tool_use_id: str, content: str) -> dict:
 
 
 def _write_escalation(conv: dict, inp: dict) -> None:
-    entry = {
+    memory.write_escalation({
         "patient_id": conv["patient_id"],
         "phase": conv["phase"],
         "topic": inp.get("topic", ""),
         "reason": inp.get("reason", ""),
-        "at": agent_mod.now_iso(),
-    }
-    with agent_mod.FOLLOWUP_FILE.open("a") as f:
-        f.write(json.dumps(entry) + "\n")
+        "at": memory.now_iso(),
+    })
 
 
 def _save_session(conv: dict) -> None:
     fin = conv.get("finish") or {}
     needs = fin.get("needs_followup") or [e.get("topic") for e in conv["escalations"]]
-    agent_mod.save_session(
+    memory.save_session(
         conv["patient_id"],
         {
             "phase": conv["phase"],
-            "at": agent_mod.now_iso(),
+            "at": memory.now_iso(),
             "covered": fin.get(
                 "covered", [r["topic"] for r in conv["recorded"] if r.get("correct")]
             ),
@@ -219,9 +232,8 @@ def _start_conversation(question_id: int, answer: str) -> tuple[str, list[dict],
     if question is None:
         raise KeyError(question_id)
 
-    questions = json.loads(QUESTIONS_FILE.read_text())["questions"]
-    available = [q for q in questions if q["care_phase"] in (PHASE, "both")]
-    prior = agent_mod.load_prior_misses(PATIENT_ID)
+    available = [q for q in active_questions() if q.get("care_phase") in (PHASE, "both")]
+    prior = memory.load_prior_misses(PATIENT_ID)
     prior_line = (
         "In a PRIOR session this patient MISSED these topics — re-verify them "
         f"FIRST: {json.dumps(prior)}"
@@ -256,11 +268,24 @@ def _start_conversation(question_id: int, answer: str) -> tuple[str, list[dict],
     }
     _conversations[cid] = conv
     events = _run_agent(conv)
+    memory.save_conversation(cid, conv)  # persist so a restart mid-session survives
     return cid, events, conv["finished"]
 
 
+def _rehydrate(cid: str) -> dict | None:
+    """Reload a conversation from the DB after a server restart dropped the cache."""
+    stored = memory.load_conversation(cid)
+    if stored is None:
+        return None
+    stored.setdefault("recorded", [])
+    stored.setdefault("escalations", [])
+    stored.setdefault("finish", None)
+    _conversations[cid] = stored
+    return stored
+
+
 def _continue_conversation(cid: str, answer: str) -> tuple[list[dict], bool]:
-    conv = _conversations.get(cid)
+    conv = _conversations.get(cid) or _rehydrate(cid)
     if conv is None:
         raise KeyError(cid)
     pending = conv.get("pending")
@@ -272,6 +297,7 @@ def _continue_conversation(cid: str, answer: str) -> tuple[list[dict], bool]:
     )
     conv["pending"] = None
     events = _run_agent(conv)
+    memory.save_conversation(cid, conv)  # persist the resumed state
     return events, conv["finished"]
 
 
